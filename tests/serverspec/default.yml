@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  roles:
+    - ansible-role-icinga2
+  vars:
+    icinga2_config: ""

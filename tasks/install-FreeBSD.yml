@@ -1,0 +1,6 @@
+---
+
+- name: Install icinga2
+  pkgng:
+    name: icinga2
+    state: present

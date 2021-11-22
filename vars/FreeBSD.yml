@@ -1,0 +1,3 @@
+---
+__icinga2_db_dir: /var/db/icinga2
+__icinga2_conf_dir: /usr/local/etc/icinga2
