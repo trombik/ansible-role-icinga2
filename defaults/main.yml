@@ -1,9 +1,21 @@
 ---
-icinga2_user: icinga2
-icinga2_group: icinga2
-icinga2_log_dir: /var/log/icinga2
-icinga2_db_dir: "{{ __icinga2_db_dir }}"
-icinga2_service: icinga2
+icinga2_user: "{{ __icinga2_user }}"
+icinga2_group: "{{ ____icinga2_group }}"
+icinga2_log_dir: "{{ __icinga2_log_dir }}"
+icinga2_package: "{{ __icinga2_package }}"
+icinga2_extra_packages: "{{ __icinga2_extra_packages }}"
+icinga2_service: "{{ __icinga2_service }}"
 icinga2_conf_dir: "{{ __icinga2_conf_dir }}"
-icinga2_conf_file: "{{ __icinga2_conf_dir }}/icinga2.conf"
+icinga2_conf_files: []
+icinga2_features: []
 icinga2_flags: ""
+icinga2_database_type: postgresql
+icinga2_database_type: postgresql
+icinga2_database_login_host: 127.0.0.1
+icinga2_database_login_user: icinga_ido
+icinga2_database_login_password: ""
+icinga2_database_port: 5432
+icinga2_database_name: icinga_ido
+icinga2_database_user: icinga_ido
+icinga2_database_password: ""
+icinga2_database_schema_file: "{{ __icinga2_database_schema_file }}"

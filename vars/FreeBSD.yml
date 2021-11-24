@@ -1,3 +1,9 @@
 ---
-__icinga2_db_dir: /var/db/icinga2
+__icinga2_user: icinga
+__icinga2_group: icinga
+__icinga2_log_dir: /var/log/icinga2
+__icinga2_package: icinga2
+__icinga2_service: icinga2
+__icinga2_extra_packages: []
 __icinga2_conf_dir: /usr/local/etc/icinga2
+__icinga2_database_schema_file: /usr/local/share/icinga2-ido-pgsql/schema/pgsql.sql

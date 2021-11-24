@@ -1,6 +1,27 @@
 ---
 
 - name: Install icinga2
-  pkgng:
-    name: icinga2
+  ansible.builtin.pkgng:
+    name: "{{ icinga2_package }}"
     state: present
+
+- name: Install icinga2_extra_packages
+  ansible.builtin.pkgng:
+    name: "{{ icinga2_extra_packages }}"
+    state: present
+
+- name: "Install psycopg2"
+  ansible.builtin.pkgng:
+    name: databases/py-psycopg2
+    state: present
+
+- name: Create /etc/rc.conf.d/icinga2
+  ansible.builtin.template:
+    src: FreeBSD.rc.j2
+    dest: "/etc/rc.conf.d/{{ icinga2_service }}"
+    mode: "0644"
+
+- name: Enable icinga2
+  ansible.builtin.service:
+    name: "{{ icinga2_service }}"
+    enabled: yes

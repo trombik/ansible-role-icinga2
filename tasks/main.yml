@@ -1,37 +1,90 @@
 ---
 # tasks file for ansible-role-icinga2
 
-- include_vars: "{{ ansible_os_family }}.yml"
+- name: "Include {{ ansible_os_family }}.yml"
+  include_vars: "{{ ansible_os_family }}.yml"
 
-- include: "install-{{ ansible_os_family }}.yml"
+- name: "Include install-{{ ansible_os_family }}.yml"
+  include: "install-{{ ansible_os_family }}.yml"
 
-- name: Create log directory
-  file:
-    path: "{{ icinga2_log_dir }}"
-    mode: 0755
-    owner: "{{ icinga2_user }}"
-    group: "{{ icinga2_group }}"
-    state: directory
+- name: Create icinga2_conf_files
+  ansible.builtin.template:
+    src: conf.j2
+    dest: "{{ icinga2_conf_dir }}/{{ item['name'] }}"
+    mode: "{{ item['mode'] | default('0644') }}"
+  with_items: "{{ icinga2_conf_files }}"
+  when:
+    - item['state'] | default('present') == 'present'
   notify: Restart icinga2
 
-- name: Create db directory
-  file:
-    path: "{{ icinga2_db_dir }}"
-    mode: 0755
-    owner: "{{ icinga2_user }}"
-    group: "{{ icinga2_group }}"
-    state: directory
+- name: Delete icinga2_conf_files
+  ansible.builtin.file:
+    path: "{{ icinga2_conf_dir }}/{{ item['name'] }}"
+    state: absent
+  with_items: "{{ icinga2_conf_files }}"
+  when:
+    - "'state' in item and item['state'] == 'absent'"
   notify: Restart icinga2
 
-- name: Create icinga2.conf
-  template:
-    src: icinga2.conf.j2
-    dest: "{{ icinga2_conf_file }}"
-    validate: echo %s
+- name: Enable icinga features
+  ansible.builtin.command: "icinga2 feature enable {{ item['name'] | quote }}"
+  args:
+    creates: "{{ icinga2_conf_dir }}/features-enabled/{{ item['name'] }}.conf"
+  with_items: "{{ icinga2_features }}"
+  when:
+    - item['state'] | default('enabled') == 'enabled'
   notify: Restart icinga2
+
+- name: Disable icinga features
+  ansible.builtin.command: "icinga2 feature disable {{ item['name'] | quote }}"
+  args:
+    removes: "{{ icinga2_conf_dir }}/features-enabled/{{ item['name'] }}.conf"
+  with_items: "{{ icinga2_features }}"
+  when:
+    - "'state' in item and item['state'] == 'disabled'"
+  notify: Restart icinga2
+
+- name: Create database (postgresql)
+  community.general.postgresql_db:
+    login_host: "{{ icinga2_database_login_host }}"
+    login_user: "{{ icinga2_database_login_user }}"
+    login_password: "{{ icinga2_database_login_password }}"
+    port: "{{ icinga2_database_port }}"
+    name: "{{ icinga2_database_name }}"
+    owner: "{{ icinga2_database_user }}"
+    state: present
+  register: __icinga2_create_database
+  when:
+    - icinga2_database_type == "postgresql"
+
+- name: See if database schema is in the database
+  community.general.postgresql_query:
+    login_host: "{{ icinga2_database_login_host }}"
+    login_user: "{{ icinga2_database_login_user }}"
+    login_password: "{{ icinga2_database_login_password }}"
+    port: "{{ icinga2_database_port }}"
+    db: "{{ icinga2_database_name }}"
+    query: SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename LIKE 'icinga_%');
+  register: __icinga2_schema_exists
+  when:
+    - icinga2_database_type == "postgresql"
+
+- name: Create database schema (postgresql)
+  community.general.postgresql_db:
+    login_host: "{{ icinga2_database_login_host }}"
+    login_user: "{{ icinga2_database_login_user }}"
+    login_password: "{{ icinga2_database_login_password }}"
+    port: "{{ icinga2_database_port }}"
+    name: "{{ icinga2_database_name }}"
+    owner: "{{ icinga2_database_user }}"
+    target: "{{ icinga2_database_schema_file }}"
+    state: restore
+  when:
+    - icinga2_database_type == "postgresql"
+    - __icinga2_create_database['changed'] or not __icinga2_schema_exists['query_result'][0]['exists']
 
 - name: Start icinga2
-  service:
+  ansible.builtin.service:
     name: "{{ icinga2_service }}"
     enabled: true
     state: started

@@ -1,0 +1,6 @@
+---
+
+roles:
+  - name: trombik.postgresql
+collections:
+  - name: community.general

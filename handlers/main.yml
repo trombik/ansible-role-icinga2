@@ -2,5 +2,5 @@
 
 - name: Restart icinga2
   service:
-    name: icinga2
+    name: "{{ icinga2_service }}"
     state: restarted
