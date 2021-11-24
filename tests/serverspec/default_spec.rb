@@ -3,17 +3,15 @@ require "serverspec"
 
 package = "icinga2"
 service = "icinga2"
-config_dir  = case os[:family]
-              when "freebsd"
-                "/usr/local/etc/icinga2"
-              else
-                "/etc/icinga2/icinga2.conf"
-              end
-user    = "icinga"
-group   = "icinga"
-ports   = []
+config_dir = case os[:family]
+             when "freebsd"
+               "/usr/local/etc/icinga2"
+             else
+               "/etc/icinga2/icinga2.conf"
+             end
+ports = []
 # log_dir = "/var/log/icinga2"
-features = %w[ checker ido-pgsql mainlog notification ]
+# TODO features = %w[checker ido-pgsql mainlog notification]
 config_files = %w[
   icinga2.conf
   zones.conf
