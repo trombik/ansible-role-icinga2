@@ -592,8 +592,6 @@
             assign where (host.address || host.address6) && host.vars.os == "FreeBSD"
           }
 
-
-
           apply Service for (http_vhost => config in host.vars.http_vhosts) {
             import "generic-service"
 

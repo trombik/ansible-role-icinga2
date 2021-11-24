@@ -10,7 +10,6 @@ icinga2_conf_files: []
 icinga2_features: []
 icinga2_flags: ""
 icinga2_database_type: postgresql
-icinga2_database_type: postgresql
 icinga2_database_login_host: 127.0.0.1
 icinga2_database_login_user: icinga_ido
 icinga2_database_login_password: ""
