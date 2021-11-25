@@ -6,4 +6,5 @@ __icinga2_package: icinga2
 __icinga2_service: icinga2
 __icinga2_extra_packages: []
 __icinga2_conf_dir: /usr/local/etc/icinga2
+__icinga2_data_dir: /var/lib/icinga2
 __icinga2_database_schema_file: /usr/local/share/icinga2-ido-pgsql/schema/pgsql.sql

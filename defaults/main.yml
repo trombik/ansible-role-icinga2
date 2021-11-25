@@ -7,6 +7,7 @@ icinga2_extra_packages: "{{ __icinga2_extra_packages }}"
 icinga2_service: "{{ __icinga2_service }}"
 icinga2_conf_dir: "{{ __icinga2_conf_dir }}"
 icinga2_conf_files: []
+icinga2_data_dir: "{{ __icinga2_data_dir }}"
 icinga2_features: []
 icinga2_flags: ""
 icinga2_database_type: postgresql
