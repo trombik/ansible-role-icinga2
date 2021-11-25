@@ -2,5 +2,7 @@
 
 roles:
   - name: trombik.postgresql
+  - name: trombik.cfssl
+  - name: trombik.x509_certificate
 collections:
   - name: community.general

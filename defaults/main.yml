@@ -1,6 +1,6 @@
 ---
 icinga2_user: "{{ __icinga2_user }}"
-icinga2_group: "{{ ____icinga2_group }}"
+icinga2_group: "{{ __icinga2_group }}"
 icinga2_log_dir: "{{ __icinga2_log_dir }}"
 icinga2_package: "{{ __icinga2_package }}"
 icinga2_extra_packages: "{{ __icinga2_extra_packages }}"
@@ -10,6 +10,10 @@ icinga2_conf_files: []
 icinga2_data_dir: "{{ __icinga2_data_dir }}"
 icinga2_features: []
 icinga2_flags: ""
+icinga2_api_bind_host: 127.0.0.1
+icinga2_api_bind_port: 5665
+icinga2_include_role_x509_certificate: no
+icinga2_x509_certificate_vars: {}
 icinga2_database_type: postgresql
 icinga2_database_login_host: 127.0.0.1
 icinga2_database_login_user: icinga_ido
